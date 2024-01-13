@@ -1,4 +1,3 @@
-```markdown
 # ESPHome Installation and Configuration Guide
 
 ## Installation
@@ -63,4 +62,3 @@
 - Ensure the ESP32 is in bootloading mode if required by your specific board. This often involves holding down a button on the ESP32 while connecting it.
 
 By following these steps, you should be able to bootstrap your ESP32 board with custom firmware and integrate it with your Home Assistant setup.
-```
