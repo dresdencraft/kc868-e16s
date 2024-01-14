@@ -1,0 +1,276 @@
+esphome:
+  name: kc868-e16s
+  platform: ESP32
+  board: esp32dev
+
+i2c:
+  sda: 16
+  scl: 15
+  scan: true
+  id: bus_a
+
+pcf8574:
+  - id: 'pcf8574_hub_out_1'  # for output channel 1-8
+    address: 0x21
+
+  - id: 'pcf8574_hub_out_2'  # for output channel 9-16
+    address: 0x25
+
+  - id: 'pcf8574_hub_in_1'  # for input channel 1-8
+    address: 0x22
+
+  - id: 'pcf8574_hub_in_2'  # for input channel 9-16
+    address: 0x24
+
+# Ethernet configuration with DHCP
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO17_OUT
+  phy_addr: 0
+
+# Individual outputs
+switch:
+  - platform: gpio
+    name: "Sol-Ark Grid Input Mercury Contactors"
+    id: sol_ark_grid_input_mercury_contactor
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 0
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Top Element"
+    id: electric_water_heater_1_top_element
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 1
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 2 - Top Element"
+    id: electric_water_heater_2_top_element
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 2
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Bottom Element"
+    id: electric_water_heater_1_bottom_element
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 3
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 2 - Bottom Element"
+    id: electric_water_heater_2_bottom_element
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 4
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Hot Water Recirculation Pump"
+    id: hot_water_recirculation_pump
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 5
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - Temper Tanks"
+    id: geothermal_desuperheater_pump_3_way_electronic_valve_temper_tanks
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 6
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - All Tanks"
+    id: geothermal_desuperheater_pump_3_way_electronic_valve_all_tanks
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 7
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Geothermal Desuperheater ByPass Electronic Valve"
+    id: geothermal_desuperheater_bypass_electronic_valve
+    pin:
+      pcf8574: pcf8574_hub_out_2
+      number: 0
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Output Cut Off Electronic Valve"
+    id: electric_water_heater_1_output_cut_off_electronic_valve
+    pin:
+      pcf8574: pcf8574_hub_out_2
+      number: 1
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Input Cut Off Electronic Valve"
+    id: electric_water_heater_1_input_cut_off_electronic_valve
+    pin:
+      pcf8574: pcf8574_hub_out_2
+      number: 2
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Recirculation Cut Off Electronic Valve"
+    id: electric_water_heater_1_recirculation_cut_off_electronic_valve
+    pin:
+      pcf8574: pcf8574_hub_out_2
+      number: 3
+      mode: OUTPUT
+      inverted: true
+
+# Individual outputs
+binary_sensor:
+  - platform: gpio
+    name: "Sol-Ark Grid Input Mercury Contactors - Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 0
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: sol_ark_grid_input_mercury_contactor
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Top Element Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 1
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_1_top_element
+
+  - platform: gpio
+    name: "Electric Water Heater 2 - Top Element Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 2
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_2_top_element
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Bottom Element Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 3
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_1_bottom_element
+
+  - platform: gpio
+    name: "Electric Water Heater 2 - Bottom Element Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 4
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_2_bottom_element
+
+  - platform: gpio
+    name: "Hot Water Recirculation Pump - Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 5
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: hot_water_recirculation_pump
+
+  - platform: gpio
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - Temper Tanks Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 6
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: geothermal_desuperheater_pump_3_way_electronic_valve_temper_tanks
+
+  - platform: gpio
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - All Tanks Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 7
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: geothermal_desuperheater_pump_3_way_electronic_valve_all_tanks
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Output Cut Off Electronic Valve - Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_2
+      number: 0
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_1_output_cut_off_electronic_valve
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Input Cut Off Electronic Valve - Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_2
+      number: 1
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_1_input_cut_off_electronic_valve
+
+  - platform: gpio
+    name: "Electric Water Heater 1 - Recirculation Cut Off Electronic Valve - Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_2
+      number: 2
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: electric_water_heater_1_recirculation_cut_off_electronic_valve
+
+# Enable logging
+logger:
+  level: debug
+
+# Enable Home Assistant API
+api:
+  #password: <password>  # Add your password here for API access
+
+# Enable OTA updates
+ota:
+  #password: <password>  # Add your password here for OTA updates
