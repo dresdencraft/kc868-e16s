@@ -41,7 +41,7 @@ compile_firmware:
 
 # Upload Firmware to ESP32
 upload_firmware:
-	esphome upload --device $(USB_DEVICE) --file ./.esphome/build/$(CONFIG_FILE)/.pioenvs/$(CONFIG_FILE)/firmware.bin $(CONFIG_FILE)
+	esphome upload --device $(USB_DEVICE) --file ./.esphome/build/$(CONFIG_FILE)/.pioenvs/$(CONFIG_FILE)/firmware-factory.bin $(CONFIG_FILE)
 
 # Help
 help:

@@ -87,8 +87,8 @@ switch:
       inverted: true
 
   - platform: gpio
-    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve"
-    id: geothermal_desuperheater_pump_3_way_electronic_valve
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - Temper Tanks"
+    id: geothermal_desuperheater_pump_3_way_electronic_valve_temper_tanks
     pin:
       pcf8574: pcf8574_hub_out_1
       number: 6
@@ -96,11 +96,20 @@ switch:
       inverted: true
 
   - platform: gpio
-    name: "Geothermal Desuperheater ByPass Electronic Valve"
-    id: geothermal_desuperheater_bypass_electronic_valve
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - All Tanks"
+    id: geothermal_desuperheater_pump_3_way_electronic_valve_all_tanks
     pin:
       pcf8574: pcf8574_hub_out_1
       number: 7
+      mode: OUTPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Geothermal Desuperheater ByPass Electronic Valve"
+    id: geothermal_desuperheater_bypass_electronic_valve
+    pin:
+      pcf8574: pcf8574_hub_out_2
+      number: 0
       mode: OUTPUT
       inverted: true
 
@@ -109,7 +118,7 @@ switch:
     id: electric_water_heater_1_output_cut_off_electronic_valve
     pin:
       pcf8574: pcf8574_hub_out_2
-      number: 0
+      number: 1
       mode: OUTPUT
       inverted: true
 
@@ -118,7 +127,7 @@ switch:
     id: electric_water_heater_1_input_cut_off_electronic_valve
     pin:
       pcf8574: pcf8574_hub_out_2
-      number: 1
+      number: 2
       mode: OUTPUT
       inverted: true
 
@@ -127,7 +136,7 @@ switch:
     id: electric_water_heater_1_recirculation_cut_off_electronic_valve
     pin:
       pcf8574: pcf8574_hub_out_2
-      number: 2
+      number: 3
       mode: OUTPUT
       inverted: true
 
@@ -200,7 +209,7 @@ binary_sensor:
         - switch.toggle: hot_water_recirculation_pump
 
   - platform: gpio
-    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - Switch"
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - Temper Tanks Switch"
     pin:
       pcf8574: pcf8574_hub_in_1
       number: 6
@@ -208,13 +217,24 @@ binary_sensor:
       inverted: true
     on_press:
       then:
-        - switch.toggle: geothermal_desuperheater_pump_3_way_electronic_valve
+        - switch.toggle: geothermal_desuperheater_pump_3_way_electronic_valve_temper_tanks
+
+  - platform: gpio
+    name: "Geothermal Desuperheater Pump 3 Way Electronic Valve - All Tanks Switch"
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 7
+      mode: INPUT
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: geothermal_desuperheater_pump_3_way_electronic_valve_all_tanks
 
   - platform: gpio
     name: "Electric Water Heater 1 - Output Cut Off Electronic Valve - Switch"
     pin:
-      pcf8574: pcf8574_hub_in_1
-      number: 7
+      pcf8574: pcf8574_hub_in_2
+      number: 0
       mode: INPUT
       inverted: true
     on_press:
@@ -225,7 +245,7 @@ binary_sensor:
     name: "Electric Water Heater 1 - Input Cut Off Electronic Valve - Switch"
     pin:
       pcf8574: pcf8574_hub_in_2
-      number: 0
+      number: 1
       mode: INPUT
       inverted: true
     on_press:
@@ -236,7 +256,7 @@ binary_sensor:
     name: "Electric Water Heater 1 - Recirculation Cut Off Electronic Valve - Switch"
     pin:
       pcf8574: pcf8574_hub_in_2
-      number: 1
+      number: 2
       mode: INPUT
       inverted: true
     on_press:
@@ -249,4 +269,8 @@ logger:
 
 # Enable Home Assistant API
 api:
-  password: <password>  # Add your password here for API access
+  #password: <password>  # Add your password here for API access
+
+# Enable OTA updates
+ota:
+  #password: <password>  # Add your password here for OTA updates

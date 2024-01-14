@@ -72,7 +72,7 @@
 - Check the dmesg output for the USB device connection.
 - Via Command Line upload the initial firmware:
     ```bash
-    esphome upload --device /dev/ttyUSB0 --file ./.esphome/build/kc868-e16s/.pioenvs/kc868-e16s/firmware.bin kc868-e16s.yaml
+    esphome upload --device /dev/ttyUSB0 --file ./.esphome/build/kc868-e16s/.pioenvs/kc868-e16s/firmware-factory.bin kc868-e16s.yaml
     ```
 - Once the ESP32 board is configured, it will reboot and connect to your Ethernet network.
 - The ESP32 board will be assigned an IP address via DHCP.
