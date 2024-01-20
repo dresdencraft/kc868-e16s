@@ -1,5 +1,5 @@
 esphome:
-  name: kc868-e16s
+  name: kc868-e16s-v2
   platform: ESP32
   board: esp32dev
 
@@ -265,7 +265,7 @@ binary_sensor:
 
 # Enable logging
 logger:
-  level: debug
+  level: INFO
 
 # Enable Home Assistant API
 api:

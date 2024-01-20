@@ -1,0 +1,676 @@
+esphome:
+  name: kc868-m16-v2
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO17_OUT
+  phy_addr: 0
+
+cd74hc4067:
+  - id: cd74hc4067_1
+    pin_s0: 32
+    pin_s1: 33
+    pin_s2: 13
+    pin_s3: 16
+
+# platform: adc
+#   - platform: adc sensor configuration
+#   - name: Descriptive name for the sensor
+#   - pin: GPIO pin number where the sensor is connected (integer)
+#   - id: Unique identifier for the sensor
+#   - update_interval: Update frequency of sensor readings (time interval)
+#   - attenuation: Attenuation level for input voltage range (string: "0db", "2.5db", "6db", "11db")
+#   - accuracy_decimals: Number of decimal places in sensor readings (integer)
+#   - filters: Filters applied to sensor readings (list)
+#     - multiply: Multiplier for the sensor value (float)
+#     - median: Median filter for smoothing readings (dictionary)
+#       - window_size: Size of the median filter window (integer)
+#       - send_every: Frequency to send filtered readings (integer)
+#       - send_first_at: Initial send frequency (integer)
+#   - unit_of_measurement: Unit of measurement, e.g., Volts (string)
+#   - icon: Icon from Material Design Icons (string)
+#   - state_class: Class of the sensor state (string)
+#   - device_class: Device class for Home Assistant integration (string)
+sensor:
+  - platform: adc
+    name: "Voltage Clamp Sensor"
+    pin: 35
+    id: voltage_clamp_sensor
+    update_interval: 1s
+    attenuation: 0db
+    accuracy_decimals: 3
+    filters:
+      - multiply: 1.0
+      - median:
+          window_size: 7
+          send_every: 4
+          send_first_at: 3
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: adc
+    name: "Current Clamp Sensor"
+    pin: 36
+    id: current_clamp_sensor
+    update_interval: 1s
+    attenuation: 11db
+    accuracy_decimals: 3
+    filters:
+      - multiply: 1.0
+      - median:
+          window_size: 7
+          send_every: 4
+          send_first_at: 3
+    unit_of_measurement: "mA"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+
+# - platform: adc
+#   name: "Not Used ADC Sensor GPIO34"
+#   pin: 34
+#   id: not_used_adc_sensor_gpio34
+#   update_interval: 15s
+#   attenuation: 11db
+#   accuracy_decimals: 3
+#   filters:
+#     - multiply: 1.0
+#     - median:
+#         window_size: 7
+#         send_every: 4
+#         send_first_at: 3
+#   unit_of_measurement: "V"
+#   icon: "mdi:flash"
+#   state_class: "measurement"
+#   device_class: "voltage"
+
+# - platform: adc
+#   name: "Not Used ADC Sensor GPIO39"
+#   pin: 39
+#   id: not_used_adc_sensor_gpio39
+#   update_interval: 15s
+#   attenuation: 11db
+#   accuracy_decimals: 3
+#   filters:
+#     - multiply: 1.0
+#     - median:
+#         window_size: 7
+#         send_every: 4
+#         send_first_at: 3
+#   unit_of_measurement: "V"
+#   icon: "mdi:flash"
+#   state_class: "measurement"
+#   device_class: "voltage"
+
+# CD74HC4067 Multiplexer Sensor Configurations
+# These blocks are designed to interface with the CD74HC4067 16-channel analog multiplexer.
+# The purpose of these configurations is to enable the reading of multiple analog sensors using a single ADC pin on a microcontroller like an ESP32.
+# This setup is crucial for systems where a large number of sensors need to be connected, but the number of ADC pins is limited.
+#
+# - platform: cd74hc4067: Specifies the use of the CD74HC4067 multiplexer.
+# - id: Provides a unique identifier for each channel of the multiplexer.
+# - number: Refers to the physical channel number on the CD74HC4067 device.
+# - sensor: Links the multiplexer channel to an ADC sensor for analog signal processing.
+# - update_interval: Determines how often the sensor readings are updated.
+# - name: Assigns a human-readable name to each sensor channel for easy identification.
+# - filters: Allows for the application of filters to the sensor data for accuracy and noise reduction.
+#   - multiply: A filter to scale the sensor value. Adjust based on the required scaling factor.
+#   - calibrate_linear: A filter for linear calibration, crucial for accurate sensor readings.
+# - unit_of_measurement: Sets the unit of measurement for the sensor's output (e.g., Volts).
+# - icon: Chooses an icon for the sensor to represent the data type visually in user interfaces.
+# - accuracy_decimals: Sets the precision level of the sensor readings.
+# - state_class: Categorizes the type of data for analytical and historical purposes.
+# - device_class: Indicates the nature of measurement (current, voltage, temperature, etc.).
+#
+# Repeat this block for each channel (ai0 to ai15) of the CD74HC4067 multiplexer with appropriate settings.
+  - platform: cd74hc4067
+    id: hybrid_grid_feed_line_1_channel
+    number: 0
+    sensor: current_clamp_sensor
+    update_interval: 1s
+    name: "Hybrid Grid Feed Line 1 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 50.0 -> 200.0
+    unit_of_measurement: "mA"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: hybrid_grid_feed_line_2_channel
+    number: 1
+    sensor: current_clamp_sensor
+    update_interval: 1s
+    name: "Hybrid Grid Feed Line 2 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 50.0 -> 200.0
+    unit_of_measurement: "mA"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: geothermal_line_1_channel
+    number: 2
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Geothermal Line 1 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: geothermal_line_2_channel
+    number: 3
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Geothermal Line 2 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: geothermal_line_3_channel
+    number: 4
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Geothermal Line 3 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: geothermal_line_4_channel
+    number: 5
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Geothermal Line 4 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_1_top_element_line_1_channel
+    number: 6
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 1 Top Element Line 1 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_1_top_element_line_2_channel
+    number: 7
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 1 Top Element Line 2 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_1_bottom_element_line_1_channel
+    number: 8
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 1 Bottom Element Line 1 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_1_bottom_element_line_2_channel
+    number: 9
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 1 Bottom Element Line 2 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_2_top_element_line_1_channel
+    number: 10
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 2 Top Element Line 1 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_2_top_element_line_2_channel
+    number: 11
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 2 Top Element Line 2 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_2_bottom_element_line_1_channel
+    number: 12
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 2 Bottom Element Line 1 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: electric_water_heater_2_bottom_element_line_2_channel
+    number: 13
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Electric Water Heater 2 Bottom Element Line 2 Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: hot_water_recirculation_pump_channel
+    number: 14
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Hot Water Recirculation Pump Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 20.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+  - platform: cd74hc4067
+    id: garage_furnace_channel
+    number: 15
+    sensor: voltage_clamp_sensor
+    update_interval: 1s
+    name: "Garage Furnace Channel"
+    filters:
+      - multiply: 1.0
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 20.0
+    unit_of_measurement: "V"
+    icon: "mdi:flash"
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+
+# CT Clamp Sensor Configurations
+# These blocks configure CT (Current Transformer) Clamp sensors for measuring AC currents.
+# Each sensor is connected to a channel of a CD74HC4067 multiplexer, enabling multiple current measurements.
+# The purpose of this configuration is to accurately monitor electrical currents in various circuits,
+# which is essential for applications like energy monitoring and usage analysis in different parts of a system or building.
+# Each block is tailored to a specific channel of the multiplexer and calibrated for accurate current measurement.
+#
+# - platform: ct_clamp: Defines the type of sensor as a CT Clamp.
+# - sensor: Links the CT Clamp to a specific channel on the CD74HC4067 multiplexer.
+# - id: Provides a unique identifier for each CT Clamp sensor.
+# - name: Gives a human-readable name to the sensor for easy identification.
+# - update_interval: Sets how frequently the sensor updates its reading.
+# - filters: Includes calibration and other filters to refine sensor accuracy.
+# - unit_of_measurement: Specifies the unit (Amperes) for sensor readings.
+# - icon: Assigns an icon for visual representation in user interfaces.
+# - state_class: Classifies the type of data for analysis and integration.
+# - device_class: Indicates the nature of measurement (current in this case).
+# - accuracy_decimals: Determines the precision level of sensor readings.
+#
+# Repeat this block for each CT Clamp sensor (ai1 to ai16), with unique IDs and appropriate calibrations for each channel.
+  - platform: ct_clamp
+    sensor: hybrid_grid_feed_line_1_channel
+    id: ct_hybrid_grid_feed_line_1_ma
+    name: "CT Hybrid Grid Feed line 1 (mA)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 50.0 -> 200.0
+    unit_of_measurement: "mA"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: hybrid_grid_feed_line_2_channel
+    id: ct_hybrid_grid_feed_line_2_ma
+    name: "CT Hybrid Grid Feed line 2 (mA)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 50.0 -> 200.0
+    unit_of_measurement: "mA"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: geothermal_line_1_channel
+    id: ct_geothermal_line_1_a
+    name: "CT Geothermal line 1 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: geothermal_line_2_channel
+    id: ct_geothermal_line_2_a
+    name: "CT Geothermal line 2 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: geothermal_line_3_channel
+    id: ct_geothermal_line_3_a
+    name: "CT Geothermal line 3 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: geothermal_line_4_channel
+    id: ct_geothermal_line_4_a
+    name: "CT Geothermal line 4 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 60.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_1_top_element_line_1_channel
+    id: ct_electric_water_heater_1_top_element_line_1_a
+    name: "CT Electric Water Heater 1 Top Element line 1 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_1_top_element_line_2_channel
+    id: ct_electric_water_heater_1_top_element_line_2_a
+    name: "CT Electric Water Heater 1 Top Element line 2 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_1_bottom_element_line_1_channel
+    id: ct_electric_water_heater_1_bottom_element_line_1_a
+    name: "CT Electric Water Heater 1 Bottom Element line 1 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_1_bottom_element_line_2_channel
+    id: ct_electric_water_heater_1_bottom_element_line_2_a
+    name: "CT Electric Water Heater 1 Bottom Element line 2 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_2_top_element_line_1_channel
+    id: ct_electric_water_heater_2_top_element_line_1_a
+    name: "CT Electric Water Heater 2 Top Element line 1 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_2_top_element_line_2_channel
+    id: ct_electric_water_heater_2_top_element_line_2_a
+    name: "CT Electric Water Heater 2 Top Element line 2 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_2_bottom_element_line_1_channel
+    id: ct_electric_water_heater_2_bottom_element_line_1_a
+    name: "CT Electric Water Heater 2 Bottom Element line 1 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: electric_water_heater_2_bottom_element_line_2_channel
+    id: ct_electric_water_heater_2_bottom_element_line_2_a
+    name: "CT Electric Water Heater 2 Bottom Element line 2 (A)"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 30.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: hot_water_recirculation_pump_channel
+    id: ct_hot_water_recirculation_pump
+    name: "CT Hot Water Recirculation Pump"
+    update_interval: 1s
+    filters:
+     - calibrate_linear:
+         - 0.0 -> 0.0
+         - 1.0 -> 20.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+  - platform: ct_clamp
+    sensor: garage_furnace_channel
+    id: ct_garage_furnace
+    name: "CT Garage Furnace"
+    update_interval: 1s
+    filters:
+      - calibrate_linear:
+          - 0.0 -> 0.0
+          - 1.0 -> 20.0
+    unit_of_measurement: "A"
+    icon: "mdi:flash"
+    state_class: "measurement"
+    device_class: "current"
+    accuracy_decimals: 3
+
+time:
+  - platform: sntp
+    id: my_time
+
+logger:
+  level: debug
+
+api:
+
+ota:
