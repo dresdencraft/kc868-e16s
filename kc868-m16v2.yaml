@@ -250,11 +250,15 @@ sensor:
     sensor: hybrid_grid_feed_line_1_channel
     id: ct_hybrid_grid_feed_line_1
     name: "CT Hybrid Grid Feed line 1"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 50.0 -> 200.0
+        - 0.0 -> 0.0
+        - 50.0 -> 200.0
+      - median:
+          window_size: 7
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "mA"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -265,11 +269,15 @@ sensor:
     sensor: hybrid_grid_feed_line_2_channel
     id: ct_hybrid_grid_feed_line_2
     name: "CT Hybrid Grid Feed line 2"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
           - 0.0 -> 0.0
           - 50.0 -> 200.0
+      - median:
+          window_size: 7
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "mA"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -280,11 +288,15 @@ sensor:
     sensor: geothermal_line_1_channel
     id: ct_geothermal_line_1
     name: "CT Geothermal line 1"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 60.0
+          - 0.0 -> -0.03
+          - 0.043 -> 10.63
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -295,11 +307,15 @@ sensor:
     sensor: geothermal_line_2_channel
     id: ct_geothermal_line_2
     name: "CT Geothermal line 2"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 60.0
+          - 0.0 -> -0.03
+          - 0.043 -> 10.63
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -310,11 +326,15 @@ sensor:
     sensor: geothermal_line_3_channel
     id: ct_geothermal_line_3
     name: "CT Geothermal line 3"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 60.0
+          - 0.0 -> -0.03
+          - 0.043 -> 10.63
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -325,11 +345,15 @@ sensor:
     sensor: geothermal_line_4_channel
     id: ct_geothermal_line_4
     name: "CT Geothermal line 4"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 60.0
+          - 0.0 -> -0.03
+          - 0.043 -> 10.63
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -340,11 +364,15 @@ sensor:
     sensor: electric_water_heater_1_top_element_line_1_channel
     id: ct_electric_water_heater_1_top_element_line_1
     name: "CT Electric Water Heater 1 Top Element line 1"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.00
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -355,11 +383,15 @@ sensor:
     sensor: electric_water_heater_1_top_element_line_2_channel
     id: ct_electric_water_heater_1_top_element_line_2
     name: "CT Electric Water Heater 1 Top Element line 2"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.000
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -370,11 +402,15 @@ sensor:
     sensor: electric_water_heater_1_bottom_element_line_1_channel
     id: ct_electric_water_heater_1_bottom_element_line_1
     name: "CT Electric Water Heater 1 Bottom Element line 1"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.000
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -385,11 +421,15 @@ sensor:
     sensor: electric_water_heater_1_bottom_element_line_2_channel
     id: ct_electric_water_heater_1_bottom_element_line_2
     name: "CT Electric Water Heater 1 Bottom Element line 2"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.00
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -400,11 +440,15 @@ sensor:
     sensor: electric_water_heater_2_top_element_line_1_channel
     id: ct_electric_water_heater_2_top_element_line_1
     name: "CT Electric Water Heater 2 Top Element line 1"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.00
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -415,11 +459,15 @@ sensor:
     sensor: electric_water_heater_2_top_element_line_2_channel
     id: ct_electric_water_heater_2_top_element_line_2_a
     name: "CT Electric Water Heater 2 Top Element line 2"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.000
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -430,11 +478,15 @@ sensor:
     sensor: electric_water_heater_2_bottom_element_line_1_channel
     id: ct_electric_water_heater_2_bottom_element_line_1
     name: "CT Electric Water Heater 2 Bottom Element line 1"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.00
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -445,11 +497,15 @@ sensor:
     sensor: electric_water_heater_2_bottom_element_line_2_channel
     id: ct_electric_water_heater_2_bottom_element_line_2
     name: "CT Electric Water Heater 2 Bottom Element line 2"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 30.0
+        - 0.0 -> -0.0035
+        - 1.0 -> 30.00
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -460,11 +516,15 @@ sensor:
     sensor: hot_water_recirculation_pump_channel
     id: ct_hot_water_recirculation_pump
     name: "CT Hot Water Recirculation Pump"
-    update_interval: 1s
+    update_interval: 3s
     filters:
      - calibrate_linear:
-         - 0.0 -> 0.0
-         - 1.0 -> 20.0
+       - 0.0 -> -0.002
+       - 1.0 -> 20.0
+     - median:
+         window_size: 30
+         send_every: 5
+         send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -475,11 +535,15 @@ sensor:
     sensor: garage_furnace_channel
     id: ct_garage_furnace
     name: "CT Garage Furnace"
-    update_interval: 1s
+    update_interval: 3s
     filters:
       - calibrate_linear:
-          - 0.0 -> 0.0
-          - 1.0 -> 20.0
+        - 0.0 -> -0.002
+        - 1.0 -> 20.0
+      - median:
+          window_size: 30
+          send_every: 5
+          send_first_at: 3
     unit_of_measurement: "A"
     icon: "mdi:flash"
     state_class: "measurement"
@@ -491,7 +555,7 @@ time:
     id: my_time
 
 logger:
-  level: debug
+  level: ERROR
 
 api:
 
